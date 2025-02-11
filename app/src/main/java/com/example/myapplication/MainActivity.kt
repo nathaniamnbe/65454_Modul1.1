@@ -35,6 +35,16 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
+fun MyApp(modifier: Modifier = Modifier) {
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Greeting("Android")
+    }
+}
+    
+@Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Surface(color = MaterialTheme.colorScheme.primary) {
         Text(
@@ -51,3 +61,4 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
+
