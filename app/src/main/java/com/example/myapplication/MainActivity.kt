@@ -29,6 +29,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.Spring
 
 
 class MainActivity : ComponentActivity() {
@@ -62,21 +65,25 @@ fun MyApp(
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
+private fun Greeting(name: String, modifier: Modifier = Modifier) {
 
     var expanded by rememberSaveable { mutableStateOf(false) }
 
-    val extraPadding = if (expanded) 48.dp else 0.dp
-
+    val extraPadding by animateDpAsState(
+        if (expanded) 48.dp else 0.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        )
+    )
     Surface(
         color = MaterialTheme.colorScheme.primary,
         modifier = modifier.padding(vertical = 4.dp, horizontal = 8.dp)
     ) {
         Row(modifier = Modifier.padding(24.dp)) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(bottom = extraPadding)
+            Column(modifier = Modifier
+                .weight(1f)
+                .padding(bottom = extraPadding.coerceAtLeast(0.dp))
             ) {
                 Text(text = "Hello, ")
                 Text(text = name)
@@ -89,6 +96,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         }
     }
 }
+
 @Composable
 fun OnboardingScreen(
     onContinueClicked: () -> Unit,
@@ -166,4 +174,6 @@ fun MyAppPreview() {
         MyApp(Modifier.fillMaxSize())
     }
 }
+
+
 
